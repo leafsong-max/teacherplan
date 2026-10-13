@@ -1,0 +1,6 @@
+{
+  "name": "티처플랜 - 교과 수업 진도 플래너",
+  "description": "학년도·학기·담당 학급별 수업 진도 계획 및 달력 기반 진도율 관리 웹애플리케이션",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

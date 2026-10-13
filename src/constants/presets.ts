@@ -1,0 +1,252 @@
+import { ClassGroup, CurriculumItem, SchoolEvent, TimetableSlot } from '../types';
+
+export interface ColorPreset {
+  id: string;
+  name: string;
+  color: string;
+  bgLight: string;
+  borderCol: string;
+}
+
+export const CLASS_COLOR_PRESETS: ColorPreset[] = [
+  { id: 'emerald', name: '에메랄드', color: '#059669', bgLight: '#ecfdf5', borderCol: '#a7f3d0' },
+  { id: 'blue', name: '블루', color: '#2563eb', bgLight: '#eff6ff', borderCol: '#bfdbfe' },
+  { id: 'purple', name: '바이올렛', color: '#7c3aed', bgLight: '#f5f3ff', borderCol: '#ddd6fe' },
+  { id: 'amber', name: '앰버 오렌지', color: '#d97706', bgLight: '#fffbeb', borderCol: '#fde68a' },
+  { id: 'rose', name: '로즈 레드', color: '#e11d48', bgLight: '#fff1f2', borderCol: '#fecdd3' },
+  { id: 'teal', name: '청록 틸', color: '#0d9488', bgLight: '#f0fdfa', borderCol: '#99f6e4' },
+  { id: 'indigo', name: '인디고', color: '#4f46e5', bgLight: '#eef2ff', borderCol: '#c7d2fe' },
+  { id: 'cyan', name: '스카이 시안', color: '#0891b2', bgLight: '#ecfeff', borderCol: '#a5f3fc' },
+  { id: 'pink', name: '마젠타 핑크', color: '#db2777', bgLight: '#fdf2f8', borderCol: '#fbcfe8' },
+  { id: 'slate', name: '슬레이트 그레이', color: '#475569', bgLight: '#f8fafc', borderCol: '#cbd5e1' },
+];
+
+export const INITIAL_CLASSES: ClassGroup[] = [
+  {
+    id: 'class-1',
+    name: '1반',
+    grade: '2학년',
+    color: '#059669',
+    bgLight: '#ecfdf5',
+    borderCol: '#a7f3d0',
+    targetHours: 64,
+  },
+  {
+    id: 'class-2',
+    name: '2반',
+    grade: '2학년',
+    color: '#2563eb',
+    bgLight: '#eff6ff',
+    borderCol: '#bfdbfe',
+    targetHours: 64,
+  },
+  {
+    id: 'class-3',
+    name: '3반',
+    grade: '2학년',
+    color: '#7c3aed',
+    bgLight: '#f5f3ff',
+    borderCol: '#ddd6fe',
+    targetHours: 64,
+  },
+  {
+    id: 'class-4',
+    name: '4반',
+    grade: '2학년',
+    color: '#d97706',
+    bgLight: '#fffbeb',
+    borderCol: '#fde68a',
+    targetHours: 64,
+  },
+];
+
+export const INITIAL_CURRICULUM: CurriculumItem[] = [
+  {
+    id: 'curr-1',
+    order: 1,
+    unit: 'I. 물질과 규칙성',
+    subUnit: '1. 우주의 시작과 원소 생성',
+    topic: '빅뱅 우주론과 원소의 형성',
+    content: '우주 초기에 수소와 헬륨이 생성되는 과정을 이해하고 스펙트럼 관측 증거 분석',
+    materials: '스펙트럼 분광기 키트, 활동지 1호',
+  },
+  {
+    id: 'curr-2',
+    order: 2,
+    unit: 'I. 물질과 규칙성',
+    subUnit: '1. 우주의 시작과 원소 생성',
+    topic: '별의 진화와 무거운 원소의 합성',
+    content: '성간 물질에서 별이 탄생하고 초신성 폭발로 무거운 원소가 합성되는 과정 탐구',
+    materials: '별의 진화 시뮬레이션 영상',
+  },
+  {
+    id: 'curr-3',
+    order: 3,
+    unit: 'I. 물질과 규칙성',
+    subUnit: '2. 원소의 주기성과 화학 결합',
+    topic: '원소들의 주기율표와 족·주기',
+    content: '멘델레예프 주기율표와 현대 주기율표의 규칙성, 알칼리 금속과 할로젠의 특성 비교',
+    materials: '주기율표 카드 세트',
+  },
+  {
+    id: 'curr-4',
+    order: 4,
+    unit: 'I. 물질과 규칙성',
+    subUnit: '2. 원소의 주기성과 화학 결합',
+    topic: '화학 결합의 원리와 이온 결합',
+    content: '옥텟 규칙과 전자 배치를 기초로 양이온, 음이온 형성 및 이온 결합 화합물 특성 탐구',
+    materials: '이온 결합 분자 모형',
+  },
+  {
+    id: 'curr-5',
+    order: 5,
+    unit: 'I. 물질과 규칙성',
+    subUnit: '2. 원소의 주기성과 화학 결합',
+    topic: '공유 결합과 다양한 물질의 성질',
+    content: '비금속 원소 간 전자쌍 공유와 물, 메테인 등의 분자 구조 및 녹는점·전기전도성 비교 실험',
+    materials: '간이 전도계, 설탕물, 소금물',
+  },
+  {
+    id: 'curr-6',
+    order: 6,
+    unit: 'I. 물질과 규칙성',
+    subUnit: '3. 자연의 구성 물질',
+    topic: '지각과 생명체를 구성하는 규칙적 물질',
+    content: '규산염 광물의 결합 구조와 탄소 화합물의 결합 특성(사슬형, 고리형 등) 분석',
+    materials: '탄소 골격 모형 세트',
+  },
+  {
+    id: 'curr-7',
+    order: 7,
+    unit: 'I. 물질과 규칙성',
+    subUnit: '3. 자연의 구성 물질',
+    topic: '단백질과 핵산의 형성과 유전정보',
+    content: '아미노산의 펩타이드 결합 및 DNA/RNA 뉴클레오타이드 구조와 염기 서열 규칙성',
+    materials: 'DNA 입체 모형, 비즈 공예 세트',
+  },
+  {
+    id: 'curr-8',
+    order: 8,
+    unit: 'I. 물질과 규칙성',
+    subUnit: '4. 신소재의 개발과 활용',
+    topic: '물리적 성질을 변화시킨 첨단 신소재',
+    content: '초전도체, 탄소 나노튜브, 그래핀의 물리적 특성과 미래 과학기술 적용 사례 조사',
+    materials: '신소재 사례 카드, 스마트패드',
+  },
+  {
+    id: 'curr-9',
+    order: 9,
+    unit: 'II. 시스템과 상호작용',
+    subUnit: '1. 역학적 시스템',
+    topic: '중력과 자유 낙하 운동',
+    content: '지구 시스템에서 중력의 역할과 수평 투사체 및 자유 낙하 운동의 동시성 비교 실험',
+    materials: '다기능 낙하 실험 장치, 초고속 카메라 앱',
+  },
+  {
+    id: 'curr-10',
+    order: 10,
+    unit: 'II. 시스템과 상호작용',
+    subUnit: '1. 역학적 시스템',
+    topic: '운동량과 충격량, 충돌 안전 설계',
+    content: '운동량-충격량 정리와 충돌 시간 연장을 통한 충격력 완화 원리(에어백, 안전모 등)',
+    materials: '달걀 낙하 안전 착륙 장치 만들기',
+  },
+  {
+    id: 'curr-11',
+    order: 11,
+    unit: 'II. 시스템과 상호작용',
+    subUnit: '2. 지구 시스템',
+    topic: '지구 시스템의 구성 요소와 상호작용',
+    content: '기권, 수권, 지권, 생물권, 외권 간 물질 순환과 에너지 흐름(탄소 순환과 물 순환)',
+    materials: '지구계 순환 다이어그램',
+  },
+  {
+    id: 'curr-12',
+    order: 12,
+    unit: 'II. 시스템과 상호작용',
+    subUnit: '2. 지구 시스템',
+    topic: '판 구조론과 지각 변동',
+    content: '판 경계 유형(발산형, 수렴형, 보존형)과 화산·지진 분포 관계 해석 및 한반도 지질 특성',
+    materials: '세계 지진·화산 발생 지도',
+  },
+  {
+    id: 'curr-13',
+    order: 13,
+    unit: 'II. 시스템과 상호작용',
+    subUnit: '3. 생명 시스템',
+    topic: '세포의 구조와 세포막을 통한 물질 출입',
+    content: '세포 소기관의 유기적 기능 분담과 확산·삼투 현상 현미경 관찰(양파 표피세포 삼투 실험)',
+    materials: '광학현미경, 양파 표피, 소금물',
+  },
+  {
+    id: 'curr-14',
+    order: 14,
+    unit: 'II. 시스템과 상호작용',
+    subUnit: '3. 생명 시스템',
+    topic: '생체 촉매 효소와 물질대사',
+    content: '동화 작용과 이화 작용, 효소의 활성화 에너지 감소 기작과 카탈레이스 반응 실험',
+    materials: '감자 조각, 과산화수소수, 시험관',
+  },
+  {
+    id: 'curr-15',
+    order: 15,
+    unit: 'II. 시스템과 상호작용',
+    subUnit: '3. 생명 시스템',
+    topic: '생명 중심 원리와 유전정보의 흐름',
+    content: 'DNA 전사 및 mRNA 번역을 통한 단백질 합성 코돈 해석 활동 및 돌연변이의 이해',
+    materials: '코돈 암호표, 단백질 번역 워크시트',
+  },
+  {
+    id: 'curr-16',
+    order: 16,
+    unit: 'II. 시스템과 상호작용',
+    subUnit: '3. 생명 시스템',
+    topic: '1학기 학습 내용 총정리 및 수행평가 피드백',
+    content: '1학기 역학·지구·생명 시스템 융합 문제 해결 및 학생별 자기평가 보고서 작성',
+    materials: '자기성찰 평가지',
+  },
+];
+
+export const INITIAL_SCHOOL_EVENTS: SchoolEvent[] = [
+  { id: 'ev-1', date: '2026-03-01', title: '삼일절', type: 'holiday', noClass: true },
+  { id: 'ev-2', date: '2026-03-02', title: '개학식 및 입학식', type: 'event', noClass: false },
+  { id: 'ev-3', date: '2026-05-05', title: '어린이날', type: 'holiday', noClass: true },
+  { id: 'ev-4', date: '2026-05-24', title: '부처님오신날', type: 'holiday', noClass: true },
+  { id: 'ev-5', date: '2026-05-25', title: '대체공휴일', type: 'holiday', noClass: true },
+  { id: 'ev-6', date: '2026-06-06', title: '현충일', type: 'holiday', noClass: true },
+  { id: 'ev-7', date: '2026-04-27', endDate: '2026-04-30', title: '1학기 중간고사', type: 'exam', noClass: true },
+  { id: 'ev-8', date: '2026-07-06', endDate: '2026-07-09', title: '1학기 기말고사', type: 'exam', noClass: true },
+  { id: 'ev-9', date: '2026-07-20', endDate: '2026-08-14', title: '여름방학', type: 'vacation', noClass: true },
+  { id: 'ev-10', date: '2026-08-15', title: '광복절', type: 'holiday', noClass: true },
+  { id: 'ev-11', date: '2026-08-17', title: '2학기 개학', type: 'event', noClass: false },
+  { id: 'ev-12', date: '2026-09-24', endDate: '2026-09-26', title: '추석 연휴', type: 'holiday', noClass: true },
+  { id: 'ev-13', date: '2026-10-03', title: '개천절', type: 'holiday', noClass: true },
+  { id: 'ev-14', date: '2026-10-09', title: '한글날', type: 'holiday', noClass: true },
+  { id: 'ev-15', date: '2026-10-19', endDate: '2026-10-22', title: '2학기 중간고사', type: 'exam', noClass: true },
+  { id: 'ev-16', date: '2026-12-14', endDate: '2026-12-17', title: '2학기 기말고사', type: 'exam', noClass: true },
+  { id: 'ev-17', date: '2026-12-25', title: '성탄절', type: 'holiday', noClass: true },
+  { id: 'ev-18', date: '2027-01-01', title: '신정', type: 'holiday', noClass: true },
+  { id: 'ev-19', date: '2027-01-08', endDate: '2027-02-05', title: '겨울방학', type: 'vacation', noClass: true },
+  { id: 'ev-20', date: '2027-02-06', endDate: '2027-02-09', title: '설날 연휴', type: 'holiday', noClass: true },
+  { id: 'ev-21', date: '2027-02-10', title: '개학 및 종업식/졸업식', type: 'event', noClass: false },
+];
+
+export const INITIAL_TIMETABLE: TimetableSlot[] = [
+  // 월요일 (1: Mon)
+  { dayOfWeek: 1, period: 2, classId: 'class-1' },
+  { dayOfWeek: 1, period: 3, classId: 'class-2' },
+  // 화요일 (2: Tue)
+  { dayOfWeek: 2, period: 1, classId: 'class-3' },
+  { dayOfWeek: 2, period: 4, classId: 'class-4' },
+  // 수요일 (3: Wed)
+  { dayOfWeek: 3, period: 2, classId: 'class-1' },
+  { dayOfWeek: 3, period: 3, classId: 'class-2' },
+  { dayOfWeek: 3, period: 5, classId: 'class-3' },
+  // 목요일 (4: Thu)
+  { dayOfWeek: 4, period: 2, classId: 'class-4' },
+  { dayOfWeek: 4, period: 4, classId: 'class-1' },
+  { dayOfWeek: 4, period: 6, classId: 'class-2' },
+  // 금요일 (5: Fri)
+  { dayOfWeek: 5, period: 1, classId: 'class-3' },
+  { dayOfWeek: 5, period: 3, classId: 'class-4' },
+];

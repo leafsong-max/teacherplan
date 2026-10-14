@@ -53,10 +53,39 @@ export interface CalendarDay {
 }
 
 /**
+ * Returns today's date string YYYY-MM-DD in the user's local computer time
+ */
+export function getLocalTodayString(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  return formatDateKey(year, month, day);
+}
+
+/**
+ * Returns the current academic year and 0-based month index (March=0 .. next Feb=11)
+ * based on current local computer time
+ */
+export function getCurrentAcademicYearAndMonthIndex(): { academicYear: number; monthIndex: number } {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1; // 1~12
+
+  // Korean school calendar:
+  // Jan (1) and Feb (2) belong to the previous academic year
+  // March (3) to Dec (12) belong to year
+  const academicYear = month >= 3 ? year : year - 1;
+  const monthIndex = month >= 3 ? month - 3 : month + 9;
+
+  return { academicYear, monthIndex };
+}
+
+/**
  * Generates the full 35-42 calendar days for a specific year and month
  */
 export function getCalendarGrid(year: number, month: number): CalendarDay[] {
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getLocalTodayString();
   const firstDay = new Date(year, month - 1, 1);
   const lastDay = new Date(year, month, 0);
 

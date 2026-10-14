@@ -1,7 +1,7 @@
 import React from 'react';
 import { ClassGroup, LessonLog } from '../types';
 import { calculateClassProgress } from '../utils/calendar';
-import { AlertCircle, CheckCircle2, SlidersHorizontal, Plus } from 'lucide-react';
+import { AlertCircle, CheckCircle2, SlidersHorizontal, Plus, Sparkles } from 'lucide-react';
 
 interface ClassFilterBarProps {
   classes: ClassGroup[];
@@ -12,6 +12,7 @@ interface ClassFilterBarProps {
   onToggleWeekends: () => void;
   onOpenNewLesson: () => void;
   onOpenSettings: () => void;
+  onOpenTimetable?: () => void;
 }
 
 export const ClassFilterBar: React.FC<ClassFilterBarProps> = ({
@@ -23,6 +24,7 @@ export const ClassFilterBar: React.FC<ClassFilterBarProps> = ({
   onToggleWeekends,
   onOpenNewLesson,
   onOpenSettings,
+  onOpenTimetable,
 }) => {
   const { summaries, hasDiscrepancy, maxCompleted, minCompleted } = calculateClassProgress(classes, lessons);
 
@@ -108,7 +110,7 @@ export const ClassFilterBar: React.FC<ClassFilterBarProps> = ({
           })}
         </div>
 
-        {/* Right tools: Weekend toggle & New Lesson Quick Button */}
+        {/* Right tools: Weekend toggle & Batch Schedule & New Lesson Quick Button */}
         <div className="flex items-center gap-2 self-end md:self-auto shrink-0">
           <button
             type="button"
@@ -122,6 +124,18 @@ export const ClassFilterBar: React.FC<ClassFilterBarProps> = ({
           >
             {showWeekends ? '주 7일 보기' : '주 5일 (수업일만)'}
           </button>
+
+          {onOpenTimetable && (
+            <button
+              type="button"
+              onClick={onOpenTimetable}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 shadow-xs cursor-pointer transition-colors"
+              title="주간 시간표를 바탕으로 한 학기 수업 일괄 자동 등록"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <span>학기 일괄 등록</span>
+            </button>
+          )}
 
           <button
             type="button"
@@ -152,6 +166,37 @@ export const ClassFilterBar: React.FC<ClassFilterBarProps> = ({
           >
             {laggingClasses[0].className} 확인
           </button>
+        </div>
+      )}
+
+      {/* Clean Slate Guide Banner when no lessons are recorded yet */}
+      {lessons.length === 0 && (
+        <div className="max-w-7xl mx-auto mt-2 px-3.5 py-2.5 bg-emerald-50 border border-emerald-200 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-emerald-950">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>
+              <strong>수업 일지 등록 대기 중:</strong> 시간표를 설정하여 <strong>[한 학기 일괄 등록]</strong>을 실행하면 학기 전체 수업일(공휴일 자동 제외)에 수업이 자동 배치됩니다.
+            </span>
+          </div>
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+            {onOpenTimetable && (
+              <button
+                type="button"
+                onClick={onOpenTimetable}
+                className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-md shadow-xs cursor-pointer flex items-center gap-1.5 transition-colors"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>시간표로 한 학기 일괄 등록하기</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onOpenNewLesson}
+              className="font-bold text-emerald-800 hover:text-emerald-950 underline cursor-pointer px-1"
+            >
+              개별 수업 등록
+            </button>
+          </div>
         </div>
       )}
     </div>

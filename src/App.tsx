@@ -13,7 +13,11 @@ import {
   INITIAL_SCHOOL_EVENTS,
   INITIAL_TIMETABLE,
 } from './constants/presets';
-import { generateSeedLessons, getAcademicMonths } from './utils/calendar';
+import {
+  getCurrentAcademicYearAndMonthIndex,
+  getAcademicMonths,
+  generateSeedLessons,
+} from './utils/calendar';
 import { Header, MainTab } from './components/Header';
 import { MonthNavigation } from './components/MonthNavigation';
 import { ClassFilterBar } from './components/ClassFilterBar';
@@ -25,31 +29,37 @@ import { WeeklyTimetableModal } from './components/WeeklyTimetableModal';
 import { SettingsModal } from './components/SettingsModal';
 import { PrintViewModal } from './components/PrintViewModal';
 
-const STORAGE_KEY = 'teacher_plan_state_v2';
+const STORAGE_KEY = 'teacher_plan_state_clean_v3';
 
 export default function App() {
-  // Load state from localStorage or seed
+  const { academicYear: initialAcademicYear, monthIndex: initialMonthIndex } =
+    getCurrentAcademicYearAndMonthIndex();
+
+  // Load state from localStorage or start completely clean
   const [planState, setPlanState] = useState<TeacherPlanState>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Ensure clean state if previously loaded seed data
+        return {
+          ...parsed,
+          lessons: parsed.lessons || [],
+        };
       }
     } catch (e) {
       console.error('Failed to parse saved state:', e);
     }
 
-    const defaultYear = 2026;
     const defaultClasses = INITIAL_CLASSES;
-    const seedLessons = generateSeedLessons(defaultYear, defaultClasses);
 
     return {
-      academicYear: defaultYear,
-      currentSemester: '1',
+      academicYear: initialAcademicYear,
+      currentSemester: initialMonthIndex < 5 ? '1' : '2',
       subjectName: '통합과학',
       targetGrade: '2학년',
       classes: defaultClasses,
-      lessons: seedLessons,
+      lessons: [], // Pristine, cleanly erased state as requested
       schoolEvents: INITIAL_SCHOOL_EVENTS,
       curriculum: INITIAL_CURRICULUM,
       timetable: INITIAL_TIMETABLE,
@@ -68,8 +78,8 @@ export default function App() {
   // Current view tabs
   const [activeTab, setActiveTab] = useState<MainTab>('calendar');
 
-  // Month navigation: index 0 (March) to 11 (next February)
-  const [currentMonthIndex, setCurrentMonthIndex] = useState<number>(0);
+  // Month navigation: starts at current computer time month index
+  const [currentMonthIndex, setCurrentMonthIndex] = useState<number>(initialMonthIndex);
 
   // Class filtering: 'all' or specific classId
   const [selectedClassId, setSelectedClassId] = useState<string | 'all'>('all');
@@ -134,12 +144,20 @@ export default function App() {
     }));
   };
 
-  // Auto-populate lessons from weekly timetable
-  const handleAutoPopulateLessons = (newLessons: LessonLog[]) => {
+  // Auto-populate lessons from weekly timetable (supporting full semester batch)
+  const handleAutoPopulateLessons = (
+    newLessons: LessonLog[],
+    replaceRange?: { start: string; end: string }
+  ) => {
     setPlanState((prev) => {
+      let base = prev.lessons;
+      if (replaceRange) {
+        // If replacing existing, remove lessons within the specified date range
+        base = base.filter((l) => l.date < replaceRange.start || l.date > replaceRange.end);
+      }
       // Remove overlapping slots
       const newKeys = new Set(newLessons.map((l) => `${l.date}-${l.period}-${l.classId}`));
-      const existing = prev.lessons.filter(
+      const existing = base.filter(
         (l) => !newKeys.has(`${l.date}-${l.period}-${l.classId}`)
       );
       return {
@@ -239,6 +257,7 @@ export default function App() {
             onToggleWeekends={() => setShowWeekends(!showWeekends)}
             onOpenNewLesson={() => handleOpenNewLesson()}
             onOpenSettings={() => setIsSettingsModalOpen(true)}
+            onOpenTimetable={() => setIsTimetableModalOpen(true)}
           />
 
           {/* Full-width Calendar Grid with mouse wheel month scrolling */}
@@ -325,6 +344,7 @@ export default function App() {
         state={planState}
         onUpdateState={handleUpdateState}
         onResetToDemo={handleResetToDemo}
+        onClearAllLessons={() => setPlanState((prev) => ({ ...prev, lessons: [] }))}
       />
 
       {/* Print View Modal */}

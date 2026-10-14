@@ -147,8 +147,10 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           return (
             <div
               key={cell.date}
-              className={`min-h-[130px] p-1.5 flex flex-col transition-colors group relative ${
-                !cell.isCurrentMonth
+              className={`min-h-[130px] p-2 flex flex-col transition-all group relative ${
+                cell.isToday
+                  ? 'bg-emerald-50/70 ring-2 ring-emerald-500 ring-inset shadow-md z-10 rounded-sm'
+                  : !cell.isCurrentMonth
                   ? 'bg-slate-50/70 text-slate-400'
                   : hasHoliday
                   ? 'bg-rose-50/30'
@@ -159,28 +161,32 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                   : 'bg-white hover:bg-slate-50/80'
               }`}
             >
-              {/* Day Header: date number, event tags, quick add button */}
-              <div className="flex items-center justify-between mb-1">
+              {/* Day Header: date number, today indicator, quick add button */}
+              <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-1.5">
-                  <span
-                    className={`inline-flex items-center justify-center text-xs font-semibold ${
-                      cell.isToday
-                        ? 'w-6 h-6 rounded-full bg-slate-900 text-white shadow-xs'
-                        : isSunday
-                        ? 'text-rose-600 font-bold'
-                        : isSaturday
-                        ? 'text-blue-600'
-                        : cell.isCurrentMonth
-                        ? 'text-slate-800'
-                        : 'text-slate-400'
-                    }`}
-                  >
-                    {cell.day}
-                  </span>
-
-                  {cell.isToday && (
-                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1 py-0.2 rounded">
-                      오늘
+                  {cell.isToday ? (
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-7 h-7 rounded-full bg-emerald-600 text-white font-black text-xs flex items-center justify-center ring-2 ring-emerald-300 shadow-sm">
+                        {cell.day}
+                      </span>
+                      <span className="text-[10px] font-bold text-white bg-emerald-600 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        오늘
+                      </span>
+                    </div>
+                  ) : (
+                    <span
+                      className={`inline-flex items-center justify-center text-xs font-semibold ${
+                        isSunday
+                          ? 'text-rose-600 font-bold'
+                          : isSaturday
+                          ? 'text-blue-600'
+                          : cell.isCurrentMonth
+                          ? 'text-slate-800'
+                          : 'text-slate-400'
+                      }`}
+                    >
+                      {cell.day}
                     </span>
                   )}
                 </div>

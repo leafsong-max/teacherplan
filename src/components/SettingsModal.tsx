@@ -21,6 +21,7 @@ interface SettingsModalProps {
   state: TeacherPlanState;
   onUpdateState: (newState: Partial<TeacherPlanState>) => void;
   onResetToDemo: () => void;
+  onClearAllLessons?: () => void;
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -29,6 +30,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   state,
   onUpdateState,
   onResetToDemo,
+  onClearAllLessons,
 }) => {
   const [activeTab, setActiveTab] = useState<'general' | 'classes' | 'events' | 'data'>('classes');
 
@@ -472,15 +474,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <button
                   type="button"
                   onClick={handleExportJSON}
                   className="p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 flex flex-col items-center justify-center text-center gap-2 cursor-pointer shadow-xs transition-colors"
                 >
                   <Download className="w-6 h-6 text-blue-600" />
-                  <span className="text-xs font-bold text-slate-800">JSON 데이터 백업</span>
-                  <span className="text-[11px] text-slate-400">파일로 다운로드</span>
+                  <span className="text-xs font-bold text-slate-800">JSON 백업 다운로드</span>
+                  <span className="text-[11px] text-slate-400">데이터 파일 보관</span>
                 </button>
 
                 <label className="p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 flex flex-col items-center justify-center text-center gap-2 cursor-pointer shadow-xs transition-colors">
@@ -499,6 +501,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   type="button"
                   onClick={() => {
                     if (
+                      confirm('작성된 모든 수업 일지 내용을 깨끗하게 지우시겠습니까? 학급 및 기본 설정은 유지됩니다.')
+                    ) {
+                      if (onClearAllLessons) onClearAllLessons();
+                      else onUpdateState({ lessons: [] });
+                      alert('모든 수업 일지 내용이 깨끗하게 삭제되었습니다.');
+                      onClose();
+                    }
+                  }}
+                  className="p-4 rounded-xl border border-amber-200 bg-amber-50/60 hover:bg-amber-100/70 flex flex-col items-center justify-center text-center gap-2 cursor-pointer shadow-xs transition-colors"
+                >
+                  <Trash2 className="w-6 h-6 text-amber-600" />
+                  <span className="text-xs font-bold text-amber-900">수업 일지 전체 비우기</span>
+                  <span className="text-[11px] text-amber-700">작성 내용 깨끗하게 삭제</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (
                       confirm(
                         '샘플 데모 데이터로 재설정하시겠습니까? 현재 입력된 수정 내용이 기본값으로 초기화됩니다.'
                       )
@@ -510,8 +531,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                   className="p-4 rounded-xl border border-rose-200 bg-rose-50/50 hover:bg-rose-100/60 flex flex-col items-center justify-center text-center gap-2 cursor-pointer shadow-xs transition-colors"
                 >
                   <RefreshCw className="w-6 h-6 text-rose-600" />
-                  <span className="text-xs font-bold text-rose-800">기본 샘플 데이터로 복원</span>
-                  <span className="text-[11px] text-rose-600">초기 데모 데이터 재설정</span>
+                  <span className="text-xs font-bold text-rose-800">기본 샘플 복원</span>
+                  <span className="text-[11px] text-rose-600">초기 데모 재설정</span>
                 </button>
               </div>
             </div>
